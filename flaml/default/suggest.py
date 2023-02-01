@@ -82,7 +82,7 @@ def suggest_config(task, X, y, estimator_or_predictor, location=None, k=None, me
         >= version_parse(older_version)
     )
     prep = predictor["preprocessing"]
-    feature = meta_feature(
+    feature = meta_feature_fn(
         task, X_train=X, y_train=y, meta_feature_names=predictor["meta_feature_names"]
     )
     feature = (np.array(feature) - np.array(prep["center"])) / np.array(prep["scale"])
