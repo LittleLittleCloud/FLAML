@@ -61,17 +61,13 @@ def load_config_predictor(estimator_name, task, location=None):
     return predictor
 
 
-def suggest_config(task, X, y, estimator_or_predictor, location=None, k=None):
+def suggest_config(task, X, y, estimator_or_predictor, location=None, k=None, meta_feature_fn = meta_feature):
     """Suggest a list of configs for the given task and training data.
 
     The returned configs can be used as starting points for AutoML.fit().
     `FLAML_sample_size` is removed from the configs.
     """
-    task = (
-        get_classification_objective(len(np.unique(y)))
-        if task == "classification"
-        else task
-    )
+    task = "classification"
     predictor = (
         load_config_predictor(estimator_or_predictor, task, location)
         if isinstance(estimator_or_predictor, str)
@@ -98,6 +94,8 @@ def suggest_config(task, X, y, estimator_or_predictor, location=None, k=None):
     ind = int(ind.item())
     choice = neighbors[ind]["choice"] if k is None else neighbors[ind]["choice"][:k]
     configs = [predictor["portfolio"][x] for x in choice]
+    
+    return configs
     for config in configs:
         hyperparams = config["hyperparameters"]
         if hyperparams and "FLAML_sample_size" in hyperparams:
