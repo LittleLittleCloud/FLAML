@@ -848,8 +848,12 @@ class ConversableAgent(Agent):
         Returns:
             str: human input.
         """
-        reply = input(prompt)
-        return reply
+
+        try:
+            reply = input(prompt)
+            return reply
+        except Exception:
+            return 'exit'
 
     def run_code(self, code, **kwargs):
         """Run the code and return the result.
